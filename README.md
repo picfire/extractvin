@@ -36,10 +36,15 @@ Additional info available for many vehicles from:
 
 ### CLI
 
-`click` package is required for CLI. You can install `vininfo` with `click` using:
+The `click` package is required for the CLI. Install `vininfo` with CLI support using:
 ```bash
-pip install vininfo[cli]
+pip install "vininfo[cli]"
 ```
+
+Each successful `show` command appends a CSV row with the VIN, country, manufacturer,
+region, model years, and UTC timestamp. By default, records are written to `vininfo.csv`
+in the current directory. Use `--csv-file` to choose another file; `history` displays
+its records, and `--last` limits the output to the newest entries.
 
 ```bash
 $ vininfo --help
@@ -64,6 +69,13 @@ $ vininfo show XTAGFK330JY144213
 ; Verify checksum
 $ vininfo check 1M8GDM9AXKP042788
 ; Checksum is valid
+
+; Save VIN information to the default vininfo.csv file
+$ vininfo show XTAGFK330JY144213
+
+; Choose a history file and display its latest entries
+$ vininfo show XTAGFK330JY144213 --csv-file ./vehicles.csv
+$ vininfo history --csv-file ./vehicles.csv --last 10
 ```
 
 ### Python

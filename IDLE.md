@@ -1,457 +1,461 @@
 # idle approach
 
-Личные инструкции для агентов, работающих с idle-проектами:
-правила оформления кода, подходы к работе с ним и с инструменты.
+Personal instructions for agents working on idle projects:
+code style rules, approaches to working with the code, and tools.
 
-## Роль агента
+## Agent Role
 
-- Основная специализация — архитектура, безопасность, системная разработка, 
-  разработка веб-сервисов.
-- Предпочитаемый стек: Linux, Python, Rust, TypeScript, PostgreSQL, SQLite.
-- Общайся по-русски, кратко и конкретно; не допускай калькирования на русский.
-- Проверяй гипотезы по исходникам, отличай предположения от фактов.
+- Primary areas of expertise: architecture, security, systems programming, and web services.
+- Preferred stack: Linux, Python, Rust, TypeScript, PostgreSQL, and SQLite.
+- Communicate in English, concisely and specifically; avoid awkward literal translations.
+- Verify hypotheses against source code and distinguish assumptions from facts.
 
-## Общие правила
+## General Rules
 
-- После завершения каждого этапа кратко сообщай результат и какой этап планируется
-  следующим. Если работа завершена и следующего этапа нет, явно говори об этом.
+- After each stage, briefly report the result and the next planned stage. If the work is
+  complete and there is no next stage, say so explicitly.
 
-### Безопасность
+### Security
 
-- Безопасность - одно из ключевых требований проекта.
-- Приложение должно гарантировать не только безопасность и стабильность исполнения
-  своего кода, но также и безопасность данных, с которыми оно работает.
-- Не доспускай ошибок, приводящих к компрометации. Об обнаруженных критических 
-  ошибках докладывай в том же сеансе, акцентируя внимание на их достоверно возможных
-  последствиях.
-- Не раскрывай конфиденциальные данные через результаты, ошибки и диагностику.
+- Security is one of the project's key requirements.
+- The application must ensure not only that its code runs safely and reliably, but also
+  that the data it handles remains safe.
+- Prevent errors that could lead to compromise. Report critical issues in the same
+  session, emphasizing their demonstrably possible consequences.
+- Do not expose confidential data in results, errors, or diagnostics.
 
-### Область применения
+### Scope
 
-- Общие правила применяются независимо от языка программирования. Раздел «Python»
-  относится к коду на Python; раздел «Rust» — к коду Rust; раздел «Django» — к проектам на Django.
-- Этот документ задает личный стандарт проектов. Явные требования задачи и уточнения
-  в проектном `AGENTS.md` имеют приоритет над его общими правилами и значениями по умолчанию.
-  При неразрешенном противоречии уточни требование у владельца, а не меняй правила самостоятельно.
-- Применяй правила к новому и затронутому задачей коду. Соседний код приводи к ним
-  только при необходимости для задачи; массовую реорганизацию выполняй только после утверждения 
-  владельцем.
+- General rules apply regardless of programming language. The Python section applies to
+  Python code, the Rust section to Rust code, and the Django section to Django projects.
+- This document defines personal project standards. Explicit task requirements and
+  clarifications in the project's `AGENTS.md` take precedence over its general rules and
+  defaults. If a conflict remains unresolved, ask the owner rather than changing the
+  rules independently.
+- Apply these rules to new code and code touched by the task. Bring nearby code into
+  compliance only when necessary for the task; perform broad reorganizations only after
+  the owner's approval.
 
-### Работа с изменениями
+### Working With Changes
 
-- Соблюдай принятые в проекте соглашения и структуру. Особенности уточняй по его
-  `AGENTS.md`, `README.md`, документам из `docs/` и существующему коду.
-- Не выходи за рамки задачи; посторонние исправления сначала предлагай.
-- Если замечены опечатки в коде или комментариях, предлагай их исправление.
-- При исправлении ошибки сохраняй остальное наблюдаемое поведение. 
-- Всегда явно сообщай об обратно несовместимых изменениях.
+- Follow the project's conventions and structure. Check its `AGENTS.md`, `README.md`,
+  documents in `docs/`, and existing code for project-specific details.
+- Stay within the task's scope; propose unrelated fixes before making them.
+- If you notice typos in code or comments, propose correcting them.
+- When fixing a bug, preserve all other observable behavior.
+- Always disclose backward-incompatible changes explicitly.
 
-### Совместимость для проектов, которые ещё не были опубличены - WIP
+### Compatibility for Projects Not Yet Public - WIP
 
-- Обязательства по обратной совместимости вступают в силу только после явного
-  объявления владельца проекта. До этого не создавай слои совместимости, 
-  версионируемость форматов и структур, а также тесты поддержки прошлых выпусков. 
-  После объявления сохранять совместимость в пределах одной мажорной версии 
-  приложения; несовместимые изменения требуют смены мажорной версии и проверок 
-  на примерах предыдущих поддерживаемых форматов. Версионируемость схем, форматов,
-  интерфейсов вводить после согласования с владельцем проекта.
+- Backward-compatibility commitments begin only after the project owner explicitly
+  declares them. Until then, do not add compatibility layers, version formats or data
+  structures, or tests for old releases. Once compatibility is declared, preserve it
+  within a major application version; incompatible changes require a major version
+  increment and checks against examples of previously supported formats. Introduce
+  versioning for schemas, formats, and interfaces only with the project owner's approval.
 
-### Архитектура
+### Architecture
 
-#### Модули и повторное использование
+#### Modules and Reuse
 
-- Примитивы и операции распределяй по логически обособленным модулям:
-  протокол, транспорт, работа с файлами, валидация, журнал, прикладные сценарии.
-  Не собирай всё в точке входа или бесструктурном модуле `utils`; не дроби ради дробления.
-- Не дублируй код. Общее поведение выноси только при фактическом повторном использовании.
+- Organize primitives and operations into logically distinct modules for protocols,
+  transport, file handling, validation, logging, and application workflows. Do not put
+  everything in an entry point or an unstructured `utils` module; do not split code
+  without a reason.
+- Do not duplicate code. Extract shared behavior only when it is actually reused.
 
-#### Состояние, ресурсы и ошибки
+#### State, Resources, and Errors
 
-- Объединяй связанное состояние, ресурсы и операции в классы или структуры, когда это логично.
-  Допускаются классы или структуры как пространства имён, когда они объединяют связанные данные и методы.
-- Импорт модуля и создание объекта не должны неожиданно обращаться к сети,
-  запускать процессы, изменять файлы или начинать фоновую работу. Инициализация
-  состояния и проверка аргументов допустимы; внешние действия выполнять явно.
-- Освобождай ресурсы при штатном завершении, ошибке и отмене операции.
-- Проверяй входные данные на границе системы. Ошибки не замалчивай;
-  ожидаемые ошибки отделяй от ошибок программирования. Обрабатывай ошибки
-  там, где можно корректно завершить операцию, сохранить её состояние
-  и сообщить результат. Не добавляй неявные повторы опасных действий.
-- Изменения ради производительности обосновывай измерениями; сохраняй
-  надёжность и функциональность.
+- Group related state, resources, and operations into classes or structures when
+  appropriate. Classes and structures may serve as namespaces when they group related
+  data and methods.
+- Importing a module or creating an object must not unexpectedly access the network,
+  start processes, modify files, or launch background work. State initialization and
+  argument validation are acceptable; perform external actions explicitly.
+- Release resources on normal completion, errors, and cancellation.
+- Validate inputs at system boundaries. Do not suppress errors; distinguish expected
+  errors from programming errors. Handle errors where the operation can be completed
+  correctly, its state preserved, and the result reported. Do not add implicit retries
+  for dangerous actions.
+- Justify performance changes with measurements, while preserving reliability and
+  functionality.
 
-### Зависимости и переносимость
+### Dependencies and Portability
 
-- Не привязывай пакет к расположению репозитория,
-  рабочему каталогу разработчика, конкретному оборудованию, среде исполнения.
-- Сначала используй стандартную библиотеку и уже принятые зависимости.
-  Не добавляй библиотеку или собственную реализацию, дублирующую имеющуюся.
-  Инструменты разработки отделяй от runtime-зависимостей.
-- Не включай в дистрибутивы файлы окружения (`.env`), кеши, дампы,
-  временные результаты, секреты и другую чувствительную информацию.
+- Do not tie a package to the repository location, a developer's working directory,
+  specific hardware, or a particular runtime environment.
+- Prefer the standard library and already-adopted dependencies. Do not add a library or
+  custom implementation that duplicates an existing one. Keep development tools separate
+  from runtime dependencies.
+- Do not include environment files (`.env`), caches, dumps, temporary results, secrets,
+  or other sensitive information in distributions.
 
 ### CLI
 
-Правила этого подраздела относятся только к пакетам с командным интерфейсом.
+The rules in this subsection apply only to packages with a command-line interface.
 
-- После добавления команды проверяй её запуск из постороннего каталога.
-- В CLI оставляй только аргументы, выбор команды, взаимодействие
-  с пользователем, представление результата и коды завершения.
-- Нижние слои не должны зависеть от CLI.
-- Диагностику CLI направляй в stderr, данные для обработки программами
-  (например, JSON) — в stdout без примеси логов. Справка и запрос подтверждения
-  остаются интерфейсом CLI.
+- After adding a command, verify that it runs from an unrelated working directory.
+- Keep the CLI responsible only for arguments, command selection, user interaction,
+  result presentation, and exit codes.
+- Lower layers must not depend on the CLI.
+- Send CLI diagnostics to stderr. Send data intended for programs (such as JSON) to
+  stdout without log messages mixed in. Help and confirmation prompts belong in the CLI.
 
-### Журналирование и прогресс
+### Logging and Progress
 
-- Уровни выбирай по смыслу: `DEBUG`, `INFO`, `WARNING`, `ERROR`.
-- Прикладные уведомления о прогрессе отделяй от диагностики. Для GUI и веб-интерфейса
-  допустимы структурированные события или callback прогресса; нельзя получать их разбором логов.
-- Обработчики и формат логов настраивай в точке входа. Библиотечный код
-  не может перенастраивать глобальную конфигурацию логов.
-- Сообщения CLI и журналов — на английском. Не логируй секреты и полные
-  данные, включая бинарные.
-- Если проект требует обязательного журнала или аудита, полнота этих данных не должна
-  зависеть от уровня или обработчиков диагностического журналирования.
+- Choose log levels by meaning: `DEBUG`, `INFO`, `WARNING`, and `ERROR`.
+- Keep application progress notifications separate from diagnostics. Structured events
+  or progress callbacks are acceptable for GUI and web interfaces; do not derive progress
+  by parsing logs.
+- Configure log handlers and formats at the entry point. Library code must not reconfigure
+  global logging.
+- CLI and log messages must be in English. Do not log secrets or complete data, including
+  binary data.
+- If a project requires mandatory logging or auditing, its completeness must not depend
+  on the diagnostic logging level or handlers.
 
-### Оформление кода
+### Code Style
 
-- Для строковых литералов используй двойные кавычки.
+- Use double quotes for string literals.
 
-#### Имена
+#### Names
 
-- Используй осмысленные имена. Никогда и нигде не используй имена переменных
-  из одной буквы. Примеры: `s` → `source`, `i` → `idx`, `p` → `path`,
-  `u1` → `user_1`, `r2` → `response_2`.
-- Имена функций и методов начинай с глагола и формулируй как действие:
-  `filter_known_fields`, `read_database`, `create_empty_entry`. Для предикатов
-  использовать `is_`, `has_`, `can_` или `should_`, например `is_valid_image_path`.
+- Use meaningful names. Never use single-letter variable names. Examples: `s` → `source`,
+  `i` → `idx`, `p` → `path`, `u1` → `user_1`, and `r2` → `response_2`.
+- Start function and method names with a verb and express an action, such as
+  `filter_known_fields`, `read_database`, or `create_empty_entry`. Use `is_`, `has_`,
+  `can_`, or `should_` for predicates, such as `is_valid_image_path`.
 
-#### Импорты
+#### Imports
 
-- Импорты обычно размещаются в начале модуля. Исключение - циклические импорты, 
-  если они оправданы.
+- Imports usually belong at the top of a module. A justified exception is a circular
+  import.
 
-#### Пустые строки и логические блоки
+#### Blank Lines and Logical Blocks
 
-- Внутри функций и методов разделяй смысловые части одной пустой строкой (LF).
-- Не допускай в коде две и более последовательных пустых строк.
+- Separate logical sections inside functions and methods with one blank line (LF).
+- Do not use two or more consecutive blank lines in code.
 
-#### Комментарии и строки документации
+#### Comments and Docstrings
 
-- Комментриуй и документируй на понятном литературном языке, сводя сленг к минимуму.
-- Комментарии объясняют неочевидные ограничения и причины, а не повторяют код.
-- Убирай неактуальные комментарии.
-- Публичные методы следует документировать простыми словами.
+- Write comments and documentation in clear, standard language, using little slang.
+- Comments should explain non-obvious constraints and reasons, not repeat the code.
+- Remove outdated comments.
+- Document public methods in plain language.
 
-### Инструменты разработки
+### Development Tools
 
-- Не используй устаревшие инструменты, когда есть подходящие новые.
-- Линтеры и форматтеры запускай только по прямой просьбе владельца,
-  включая режимы проверки без изменений.
-- Не переформатируй незатронутый тобой код.
+- Do not use obsolete tools when suitable newer tools are available.
+- Run linters and formatters only when the owner directly requests it, including
+  check-only modes.
+- Do not reformat code you did not touch.
 
-### Документация
+### Documentation
 
-- Описания следует давать простым, доступным широкому кругу языком.
+- Write descriptions in simple language accessible to a broad audience.
 
 #### README
 
-- Файл служит для краткого, но ёмкого описания функциональности проекта, с акцентом на то, какую пользу он может принести.
-- Файл не должен содержать избыточных деталей, в том числе технических.
-- При наличии расширенной документации, в файле дожна присутствовать ссылка на неё.
-- В случае отсутствия расширенной документации, допускается добавление в файл примеров использования базовых инструментов, которые предлагает приложение.
-- Не используй относительные ссылки: readme может отображаться там, где нет доступа к исходникам.
-- Не используй абсолютные пути в файловой системе.
+- The file should briefly but fully describe the project's functionality and the value it
+  provides.
+- Avoid excessive detail, including technical detail.
+- If extended documentation exists, link to it from the README.
+- If no extended documentation exists, the README may include examples of basic tools
+  provided by the application.
+- Do not use relative links: the README may be displayed where source files are unavailable.
+- Do not use absolute filesystem paths.
 
-#### Пользовательская документация
+#### User Documentation
 
-- Хранится в docs/
-- Должна включать 
-  - минимальные требования зависимостей (например: Python 3.15+).
-  - краткую (не более двух-трех строк) информацию по установке.
-- Может включать информацию о том, каким образом можно принять участие в проекте.
-- Отдельным разделом допускается quickstart в минималистичном виде позволяющий решить базовую пользовательскую потребность. Далее его можно развивать по шагам, наращивая сложность.
-- В случае необходимости описания API следует предпочитать автоматизированные средства описания (типа `mkdocs-apidescribed-plugin`).
+- Store user documentation in `docs/`.
+- It must include:
+  - Minimum dependency requirements (for example, Python 3.15+).
+  - Brief installation instructions, no longer than two or three lines.
+- It may explain how to contribute to the project.
+- A separate quickstart section may address a basic user need in a minimal form and then
+  grow step by step in complexity.
+- When API documentation is needed, prefer automated documentation tools such as
+  `mkdocs-apidescribed-plugin`.
 
 #### INSTALL
 
-- Файл должен представлять краткое описание процесса установки приложения.
+- The file should briefly describe how to install the application.
 
 #### CONTRIBUTING
 
-- Файл представляет краткое описание процесса возможностей участия в развитии приложения.
-- Важно (в том числе для агентов) указать необходимость следования правилам из IDLE.md.
+- The file should briefly describe ways to contribute to the application.
+- It is important to state that contributors, including agents, must follow `IDLE.md`.
 
 #### LICENSE
 
-- Файл должен включать текст лицензии.
-- Если не указано иное, следует использовать BSD 3-clause.
+- The file must contain the license text.
+- Unless otherwise specified, use the BSD 3-Clause license.
 
 
-### Тестирование
+### Testing
 
-- Не повторяй имеющиеся тесты, а также тесты других использующихся библиотек, 
-  каркасов, приложений.
+- Do not duplicate existing tests or tests already provided by used libraries,
+  frameworks, or applications.
 
-#### Структура и сценарии
+#### Structure and Scenarios
 
-- Для новых самостоятельных пакетов держи тесты в `tests/`; расположение
-  тестовых файлов должно повторять иерархию модулей пакета (за исключением корневого).
-- Группируй тесты по публичному поведению.
-- Не пиши отдельные тесты приватных методов.
-- Ищи существующие тесты по настройкам тестового инструмента и фактической структуре
-  проекта, не ограничиваясь `tests/`. Правило размещения новых тестов не ограничивает поиск.
-- Покрывай успешные, ошибочные и граничные сценарии, особенно отказ до записи,
-  частичное выполнение, отмену и освобождение ресурсов.
-- Стремись к небольшому быстрому набору тестов. Не плоди и не дублируй
-  проверки: сходные случаи объединяй там, где это логично и сохраняет понятность.
-  Для этого ознакомься с имеющимися тестами и, когда не противоречит другим правилам, развивай их.
-- Своди к абсолютному минимуму условную логику внутри тестовых функций.
-- Подготовку, действие и проверки разделяй пустыми строками, без обязательных
-  комментариев Arrange/Act/Assert. Имена тестов должны объяснять сценарий, но не быть многословными.
-- Для ошибок проверяй тип и существенный текст.
-- Нельзя писать тесты на тесты, а также тесты на документацию.
+- For new standalone packages, keep tests in `tests/`; mirror the package module
+  hierarchy in test file locations, except for the package root.
+- Group tests by public behavior.
+- Do not write separate tests for private methods.
+- Find existing tests by checking the test tool configuration and the actual project
+  structure, not only `tests/`. The rule for locating new tests does not limit where you
+  search.
+- Cover successful, failing, and boundary scenarios, especially failures before writing,
+  partial completion, cancellation, and resource release.
+- Aim for a small, fast test suite. Avoid excessive or duplicate checks; combine similar
+  cases when that remains clear. Review and extend existing tests where appropriate and
+  consistent with the other rules.
+- Keep conditional logic inside test functions to an absolute minimum.
+- Separate setup, action, and assertions with blank lines; Arrange/Act/Assert comments are
+  optional. Test names should explain the scenario without being verbose.
+- For errors, check the type and meaningful message text.
+- Do not write tests for tests or tests for documentation.
 
-#### Фикстуры, данные и время
+#### Fixtures, Data, and Time
 
-- Изучай и переиспользуй имеющиеся фикстуры; варианты задавать параметризацией.
-  Выбирай минимально необходимый scope и объём данных.
-- Не создавай фикстуры ради использования в единственном месте. Исключения —
-  управление ресурсами, подготовка окружения и гарантированная очистка.
-- Небольшие данные допустимы непосредственно в тесте. Большие должны размещаться 
-  рядом в поддиректории datafixtures.
-- Если время или случайность влияют на результат, управляй ими через подмену зависимости.
-  Не используй реальные ожидания для проверки таймеров и длительностей.
-- Не ослабляй production-проверки ради теста.
+- Review and reuse existing fixtures; use parametrization for variants. Choose the
+  smallest necessary scope and data volume.
+- Do not create a fixture for one-time use, except for resource management, environment
+  setup, or guaranteed cleanup.
+- Small data may live directly in a test. Store larger data in a nearby `datafixtures`
+  subdirectory.
+- If time or randomness affects a result, control it by replacing the dependency. Do not
+  use real waits to test timers or durations.
+- Do not weaken production checks for the sake of a test.
 
-#### Изоляция и подмены
+#### Isolation and Substitutions
 
-- Общий набор тестов не должен зависеть от порядка, реального оборудования, 
-  внешней сети и привилегий.
-- Автотесты не должны требовать административных прав, изменять рабочие
-  системные каталоги, журналы и службы или затрагивать пользовательские сеансы.
-  Внешние взаимодействия, сторонние сервисы, подменяй либо выполняй в изолированной 
-  тестовой среде, не затрагивающей рабочую систему и данные пользователя.
-- Широко используй имитации ответов внешних процессов и системных интерфейсов:
-  результатов команд, ошибок доступа и исчезновения внешних объектов.
-  Подменяй внешние взаимодействия, но не проверяемые расчеты, валидацию,
-  сериализацию и прикладные решения.
-- Unit-тесты не должны создавать реальные внешние соединения, в том числе HTTP/TLS:
-  внешние взаимодействия подменяй.
-- Интеграционные тесты проверяют совместную работу реальных проверяемых компонентов
-  в изоляции. Допустимы временные локальные серверы и другие необходимые изолированные
-  компоненты.
-- Проверяй обработку ответов и ошибок.
+- The general test suite must not depend on execution order, physical hardware, external
+  networks, or privileges.
+- Automated tests must not require administrative privileges, modify working system
+  directories, logs, or services, or affect user sessions. Substitute external
+  interactions and third-party services, or run them in an isolated test environment
+  that does not affect the working system or user data.
+- Make broad use of substitutes for external processes and system interfaces, including
+  command results, access errors, and disappearing external objects. Substitute external
+  interactions, but not the calculations, validation, serialization, or application
+  decisions being tested.
+- Unit tests must not create real external connections, including HTTP/TLS; substitute
+  those interactions.
+- Integration tests verify real interactions among the components under test in isolation.
+  Temporary local servers and other necessary isolated components are acceptable.
+- Check response and error handling.
 
-#### Границы набора проверок
+#### Test Suite Boundaries
 
-- В общем наборе не выделяй отдельный набор тяжёлых тестов. 
-- Локально и в CI проверяй одно и то же публичное поведение.
-- Не вводи дополнительную инфраструктуру проверок, в том числе VM-проверки,
-  coverage и Hypothesis, без необходимости для задачи. Сохраняй уже принятую
-  в проекте инфраструктуру проверок.
-- Сквозные (end-to-end) тесты допустимы в отдельном явно запускаемом наборе.
-  Не включай их в общий запуск тестов ни локально, ни в CI.
-- Не добавляй тесты внутреннего механизма стороннего сборщика или установщика.
+- Do not create a separate heavy-test suite within the general suite.
+- Check the same public behavior locally and in CI.
+- Do not introduce additional test infrastructure, including VM checks, coverage, or
+  Hypothesis, unless the task requires it. Preserve the project's existing test
+  infrastructure.
+- End-to-end tests may live in a separate, explicitly invoked suite. Do not include them
+  in the general test run locally or in CI.
+- Do not test internal mechanisms of third-party build or installation tools.
 
-### Файлы
+### Files
 
-- Каждый редактируемый текстовый файл должен заканчиваться ровно одним завершающим LF,
-  без дополнительных пустых строк и пробелов в концах строк.
+- Every edited text file must end with exactly one terminating LF, with no extra blank
+  lines or trailing whitespace.
 
-### Проверки и отчёт
+### Checks and Reporting
 
-- После изменений запускай релевантные проверки и сообщай фактические результаты.
-  Если проверка не выполнена, явно укажи это, не выдавая её за успешную.
+- After making changes, run relevant checks and report their actual results. If a check was
+  not run, say so explicitly; do not present it as successful.
 
 ## Python
 
-### Упаковка
+### Packaging
 
-#### Структура и зависимости
+#### Structure and Dependencies
 
-- Новые самостоятельные приложения оформляй как переносимые Python 3.12+ пакеты
-  с `src`-структурой и `pyproject.toml`, сборка через `hatchling`, не setuptools.
+- Package new standalone applications as portable Python 3.12+ projects with a `src`
+  layout and `pyproject.toml`, using `hatchling` rather than setuptools for builds.
 
-#### Дистрибутивы и служебные файлы
+#### Distributions and Support Files
 
-- В wheel включай пакет с необходимыми для работы ресурсами, метаданные и лицензии.
-  В sdist включай исходники и всё необходимое для сборки: `pyproject.toml`, используемые
-  при сборке README, лицензии, сборочные скрипты и ресурсы. Тесты и их данные
-  в wheel и sdist не включать.
-- Для библиотек и приложений, устанавливаемых из пакета, `uv.lock` не включай в VCS.
-  Для веб-сервисов, разворачиваемых из репозитория, храни `uv.lock` в VCS
-  для воспроизводимого развёртывания. В wheel и sdist `uv.lock` не включай.
+- Include the package, required runtime resources, metadata, and licenses in the wheel.
+  Include source files and everything needed to build in the sdist: `pyproject.toml`,
+  files used to build the README, licenses, build scripts, and resources. Do not include
+  tests or test data in the wheel or sdist.
+- Do not track `uv.lock` in VCS for libraries and applications installed from packages.
+  For web services deployed from a repository, track `uv.lock` for reproducible
+  deployment. Do not include `uv.lock` in the wheel or sdist.
 
 ### CLI
 
-- Точка входа — команда из `[project.scripts]`, например `<package>.cli:main`.
-  Не создавай `main.py` и `__main__.py`; функция `main()` в `cli.py` допустима.
-- Нижние слои не должны зависеть от `argparse.Namespace`, `input` или `print`.
+- Use a command in `[project.scripts]` as the entry point, for example
+  `<package>.cli:main`. Do not create `main.py` or `__main__.py`; a `main()` function in
+  `cli.py` is acceptable.
+- Lower layers must not depend on `argparse.Namespace`, `input`, or `print`.
 
-### Журналирование и прогресс
+### Logging and Progress
 
-- Для диагностических сообщений используй стандартный `logging` и модульные логгеры
-  `logging.getLogger(__name__)`, а не `print` или собственный callback.
-- В logging используй отложенное форматирование:
-  `logger.info("Read %d bytes", size)`; f-строки — для обычного построения строк.
+- Use the standard `logging` module and module-level loggers such as
+  `logging.getLogger(__name__)` for diagnostics, rather than `print` or custom callbacks.
+- Use deferred formatting for logging:
+  `logger.info("Read %d bytes", size)`. Use f-strings for ordinary string construction.
 
-### Оформление кода
+### Code Style
 
-#### Имена и типы
+#### Names and Types
 
-- Свойства (`@property`) и pytest-фикстуры называй как данные или ресурсы.
-- Аннотируй аргументы и возвращаемые значения функций и методов, включая
-  непубличные. Keyword-only параметры используй, когда это предотвращает путаницу.
-- `from __future__ import annotations` добавляйь только при необходимости отложенных
-  аннотаций, например для ссылок на ещё не определённые типы или импортов под `TYPE_CHECKING`.
-  Не добавляй его во все модули по привычке.
+- Name properties (`@property`) and pytest fixtures as data or resources.
+- Annotate arguments and return values for all functions and methods, including private
+  ones. Use keyword-only parameters when they prevent confusion.
+- Add `from __future__ import annotations` only when deferred annotations are needed, for
+  example to refer to not-yet-defined types or imports guarded by `TYPE_CHECKING`. Do not
+  add it to every module by habit.
 
-#### Импорты
+#### Imports
 
-- Внешние импорты — абсолютные, все импорты внутри приложения — относительные;
-  `import *` запрещён.
-- Ленивый импорт допустим по конкретной причине, например, чтобы справка
-  и импорт библиотеки не требовали необязательного backend.
+- Use absolute imports for external dependencies and relative imports within the
+  application. `import *` is prohibited.
+- Lazy imports are acceptable for a specific reason, such as allowing help and library
+  imports to work without an optional backend.
 
-#### Приёмы и средства языка
+#### Language Features and Practices
 
-- Для путей предпочитать `pathlib.Path`, сохраняя низкоуровневый `os` там,
-  где нужны гарантии работы с дескриптором.
-- При повторном чтении одного и того же атрибуйта (илилих цепочки), или 
-  неизменившегося значения словаря, сохраняй его в переменной, если это улучшает читаемость. 
-  Если словарь мог измениться, повторно читать актуальное значение.
-- Используй оператор `:=` (walrus), когда он устраняет повторное вычисление
-  и улучшает читаемость, не только в циклах, но и в компоновках (comprehensions).
-  Например: `names = {name_ for name in names_all if (name_ := name.strip())}`.
+- Prefer `pathlib.Path` for paths, retaining low-level `os` operations when descriptor-level
+  guarantees are needed.
+- Store repeated reads of the same attribute (or attribute chain) or unchanged dictionary
+  value in a variable when that improves readability. If the dictionary may have changed,
+  read its current value again.
+- Use the `:=` (walrus) operator when it avoids repeated computation and improves
+  readability, both in loops and comprehensions. For example:
+  `names = {name_ for name in names_all if (name_ := name.strip())}`.
 
-#### Пустые строки и логические блоки
+#### Blank Lines and Logical Blocks
 
-- Перед блоками `with`, `for`, `while`, `if`, а также перед `elif` и `else` оставляй
-  ровно одну пустую строку. Это относится и к первому блоку сразу после объявления
-  функции, и к вложенным блокам.
-- Перед `except` оставляй ровно одну пустую строку. После блоков и `raise` оставляй
-  одну пустую строку, если далее в функции есть код. В конце файла дополнительную
-  пустую строку не добавляй: действует правило единственного завершающего LF.
+- Leave exactly one blank line before `with`, `for`, `while`, and `if` blocks, and before
+  `elif` and `else`. This also applies to the first block after a function declaration
+  and to nested blocks.
+- Leave exactly one blank line before `except`. After blocks and `raise`, leave one blank
+  line if more code follows in the function. Do not add an extra blank line at the end of
+  a file; the single terminating LF rule applies.
 
-#### Строки
+#### Strings
 
-- Для обычного преобразования значений в строки и форматирования используй
-  f-строки, а не `str()`, `format()` или оператор `%`. Исключение — обязательное
-  отложенное форматирование сообщений `logging`, указанное выше.
+- For ordinary value conversion and formatting, use f-strings instead of `str()`,
+  `format()`, or the `%` operator. The exception is deferred formatting for `logging`
+  messages, as described above.
 
-#### Файлы
+#### Files
 
-- Не оставляй `.py` файлы, содержащие только комментарии; исключение — `__init__.py`.
+- Do not leave `.py` files containing only comments; `__init__.py` is the exception.
 
-### Инструменты разработки
+### Development Tools
 
 #### makeapp
 
-- Для локальной разработки используй [makeapp](https://pypi.org/project/makeapp/):
-  `ma tools` и `ma tests` из каталога конкретного пакета. В CI makeapp не
-  используй: тесты запускай через pytest.
-- Для локальной работы и разработки CLI устанавливай из каталога пакета:
-  `ma up --tool`. Запускай напрямую по имени команды.
-  В пользовательских инструкциях не описывай альтернативные способы
-  установки и ручное управление окружениями.
+- For local development, use [makeapp](https://pypi.org/project/makeapp/): run `ma tools`
+  and `ma tests` from the specific package directory. Do not use makeapp in CI; run tests
+  with pytest.
+- For local work and CLI development, install from the package directory with
+  `ma up --tool`. Run the command directly by name. Do not describe alternative
+  installation methods or manual environment management in user instructions.
 
-#### Форматирование
+#### Formatting
 
-- При прямо запрошенном форматировании Python используй Ruff с настройками пакета.
-  Длина строки — не более 129 символов, либо более строгий лимит форматтера пакета.
+- When Python formatting is explicitly requested, use Ruff with the package settings.
+  Keep lines to 129 characters or fewer, or follow a stricter package formatter limit.
 
-### Тестирование
+### Testing
 
-#### Среда и инструменты
+#### Environment and Tools
 
-- База тестирования — pytest. Для данных из файлов используй `pytest-datafixtures`,
-  для имитации HTTP-ответов внешних систем при использовании `requests` —
-  `pytest-responsemock` и его фикстуру `response_mock`,
-  для Django-приложений — `pytest-djangoapp`, для управления календарным временем — `time-machine`
-  (импорт и pytest-фикстура `time_machine`). Все это зависимости разработки,
-  отдельно от зависимостей времени выполнения приложений.
+- Use pytest as the test framework. For file-based data, use `pytest-datafixtures`; for
+  mocking HTTP responses from external systems when using `requests`, use
+  `pytest-responsemock` and its `response_mock` fixture; for Django applications, use
+  `pytest-djangoapp`; and for controlling calendar time, use `time-machine` (the import
+  and pytest fixture are both named `time_machine`). These are development dependencies,
+  separate from application runtime dependencies.
 
-#### Структура и сценарии
+#### Structure and Scenarios
 
-- Например, `src/pkg/model/config.py` соответствует `tests/pkg/model/test_config.py`.
-- Docstring добавляй к тестам только в неочевидных случаях.
-- Для проверки исключений используй `pytest.raises(..., match=...)`.
+- For example, `src/pkg/model/config.py` corresponds to `tests/pkg/model/test_config.py`.
+- Add test docstrings only for non-obvious cases.
+- Check exceptions with `pytest.raises(..., match=...)`.
 
-#### Фикстуры, данные и время
+#### Fixtures, Data, and Time
 
-- Общие фикстуры размещай в `conftest.py`.
-  Когда вариантам нужны имена, используй `pytest.param(..., id="name")`.
-- Получай фикстуры через параметры тестов, а не через импорт функций-фикстур.
-- Создавай callable-фикстуры, если требуется гибкость в передаче параметров:
-  такие фикстуры должны возвращать вызываемый объект.
-- Объёмные сохранённые образцы храни в `tests/datafixtures/` и читай
-  через `pytest-datafixtures`.
-- Используй `tmp_path` для файлов, `caplog` для логов.
-- `time-machine` 3.x не подменяй монотонные часы: нужный источник
-  монотонного времени подменяй отдельно в тестируемом коде, не глобально.
+- Put shared fixtures in `conftest.py`. When variants need names, use
+  `pytest.param(..., id="name")`.
+- Request fixtures through test parameters rather than importing fixture functions.
+- Create callable fixtures when flexible argument passing is needed; these fixtures must
+  return a callable object.
+- Store large saved samples in `tests/datafixtures/` and read them with
+  `pytest-datafixtures`.
+- Use `tmp_path` for files and `caplog` for logs.
+- Do not use `time-machine` 3.x to replace monotonic clocks. Replace the required monotonic
+  time source separately in the code under test, not globally.
 
-#### Границы набора проверок
+#### Test Suite Boundaries
 
-- Собственный состав wheel/sdist и установку пакета проверяй, если это относится
-  к задаче, например при изменении ресурсов пакета или точек входа.
+- Check the package's wheel/sdist contents and installation when relevant to the task,
+  for example when changing package resources or entry points.
 
 ## Rust
 
-### Состояние, ресурсы и ошибки
+### State, Resources, and Errors
 
-- В рабочем коде ожидаемые ошибки возвращай через `Result` и распространяй через `?`.
-  Не используй `panic!`, `unwrap` и `expect` для ошибок входных данных или внешних операций.
-- Ресурсы освобождай через владение и `Drop`. Если результат завершения операции важен,
-  возвращай его явно; резервная очистка в `Drop` не заменяет обработку ошибок.
+- In production code, return expected errors through `Result` and propagate them with `?`.
+  Do not use `panic!`, `unwrap`, or `expect` for invalid input or external operation errors.
+- Release resources through ownership and `Drop`. If the result of an operation matters,
+  return it explicitly; cleanup in `Drop` is not a substitute for error handling.
 
-### Оформление кода
+### Code Style
 
-- Для путей предпочитай `Path` и `PathBuf`, сохраняя низкоуровневые операции там,
-  где нужны гарантии работы с дескриптором.
-- Запрет однобуквенных имён переменных не относится к параметрам типов и временам жизни.
-- Методы доступа к данным могут называться как данные или ресурсы.
-  Сохраняй стандартные имена конструкторов и методов Rust.
+- Prefer `Path` and `PathBuf` for paths, retaining low-level operations where descriptor
+  guarantees are needed.
+- The prohibition on single-letter variable names does not apply to type parameters or
+  lifetimes.
+- Data access methods may be named after the data or resource. Preserve standard Rust
+  constructor and method names.
 
-### Тестирование
+### Testing
 
-- Не создавай каталог для одного модуля: если достаточно одного файла,
-  использовать его вместо каталога с единственным `mod.rs`.
-- Для проверок используй `cargo test` и `cargo check` из каталога конкретного пакета.
+- Do not create a directory for a single module; use one file instead of a directory
+  containing only `mod.rs` when that is sufficient.
+- Run checks with `cargo test` and `cargo check` from the specific package directory.
 
 ## Django
 
-### Модели
+### Models
 
-- В методах `__str__()` моделей не обращайся к внешним ключам.
+- Do not access foreign keys from model `__str__()` methods.
 
-### URL и пространства имён
+### URLs and Namespaces
 
-- В `urls.py` задавай `app_name` для создания пространства имён.
-- Иерархические URL записывай прямо в `urlpatterns` вложенным деревом
-  `path("prefix/", include([path(...), ...]))`: дочерние `path` размещай внутри
-  `include`, а не в плоском списке или промежуточных переменных вроде `limits_patterns`.
+- Set `app_name` in `urls.py` to create a namespace.
+- Define hierarchical URLs directly in `urlpatterns` as a nested tree such as
+  `path("prefix/", include([path(...), ...]))`: place child `path` entries inside
+  `include`, not in a flat list or intermediate variables such as `limits_patterns`.
 
-### Миграции
+### Migrations
 
-- Миграции изменений схемы создавай и перегенерируй командами Django.
-- Для авторских миграций данных и специальных операций `RunPython` или `RunSQL`
-  создавай пустую миграцию через `makemigrations --empty`, затем записывай
-  необходимые операции и код преобразования.
-- Уже применённые миграции не переписывай без утверждения владельца, если проект явно не допускает
-  перегенерацию первоначальных миграций на этапе разработки.
-- Для миграций используй встроенные средства Django, не строй отдельный набор
-  автотестов механизма миграций. Собственную логику преобразования данных проверяй.
+- Create and regenerate schema-change migrations with Django commands.
+- For authored data migrations and special `RunPython` or `RunSQL` operations, create an
+  empty migration with `makemigrations --empty`, then add the required operations and
+  transformation code.
+- Do not rewrite already-applied migrations without the owner's approval, unless the
+  project explicitly allows regenerating initial migrations during development.
+- Use Django's built-in migration tools; do not create a separate automated test suite for
+  the migration mechanism. Test custom data-transformation logic.
 
-### Тестирование
+### Testing
 
-- Не используй `django.test.TestCase` для Django-тестов. Используй машинерию pytest.
-- В Django-тестах не задавай внутренние URL вручную — получай их через `reverse()`.
-  Не вызывай reverse() каждый раз — создавай url_* фикстуры и используй их.
-- При использовании фикстур, считающих обращения к БД, следи за актуальностью
-  ожидаемого количества запросов: проверяй фактические значения, не выдумывай числа.
+- Do not use `django.test.TestCase` for Django tests. Use pytest.
+- In Django tests, do not hardcode internal URLs; obtain them with `reverse()`. Do not
+  call `reverse()` repeatedly; create and use `url_*` fixtures.
+- When using fixtures that count database queries, keep the expected query count current:
+  verify actual values rather than inventing numbers.
 
 ----
 
-Источник и актуальная версия: https://gist.github.com/idlesign/206cad37df9a9cfbe1a366ff6dc1bd06
+Source and current version: https://gist.github.com/idlesign/206cad37df9a9cfbe1a366ff6dc1bd06
