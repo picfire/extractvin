@@ -42,9 +42,17 @@ pip install "vininfo[cli]"
 ```
 
 Each successful `show` command appends a CSV row with the VIN, country, manufacturer,
-region, model years, and UTC timestamp. By default, records are written to `vininfo.csv`
-in the current directory. Use `--csv-file` to choose another file; `history` displays
-its records, and `--last` limits the output to the newest entries.
+region, model years, and UTC timestamp. The header is added when the file is empty,
+including when it already exists as a zero-byte file. By default, records are written to
+`vininfo.csv` in the current directory; use `--csv-file` to choose another file. New CSV
+files are created with owner-only permissions (`0600`).
+
+Concurrent `show` processes take an exclusive file lock around the header check and row
+write, so cooperating `vininfo` commands do not duplicate the header or interleave rows.
+The `history` command takes the same lock while reading, so it waits for an active write
+to finish. POSIX systems use `flock`; Windows uses a one-byte `msvcrt` lock with a
+10-second wait limit. `history` validates the header and every row before displaying the
+records; `--last` limits output to the newest entries.
 
 ```bash
 $ vininfo --help
