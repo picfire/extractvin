@@ -116,7 +116,7 @@ The rules in this subsection apply only to packages with a command-line interfac
 
 ### Code Style
 
-- Use double quotes for string literals.
+- Use single quotes for string literals, matching the Ruff formatter configuration.
 
 #### Names
 
